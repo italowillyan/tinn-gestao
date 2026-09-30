@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}
+Nova compra | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="tinn-page-title mb-1">
+        Nova compra
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Registre uma nova compra realizada com um fornecedor.
+    </p>
+</div>
+
+
+<div class="card tinn-card tinn-card-auto">
+    <div class="card-body">
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+
+            <div class="row g-3">
+
+                <div class="col-md-12">
+                    <label for="{{ form.fornecedor.id_for_label }}" class="form-label">
+                        Fornecedor
+                    </label>
+
+                    {{ form.fornecedor }}
+
+                    {% for erro in form.fornecedor.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Somente fornecedores ativos da empresa
+                        aparecem nesta lista.
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="{{ form.frete.id_for_label }}" class="form-label">
+                        Frete
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            R$
+                        </span>
+
+                        {{ form.frete }}
+                    </div>
+
+                    {% for erro in form.frete.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="{{ form.desconto.id_for_label }}" class="form-label">
+                        Desconto
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            R$
+                        </span>
+
+                        {{ form.desconto }}
+                    </div>
+
+                    {% for erro in form.desconto.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="col-12">
+                    <label for="{{ form.observacao.id_for_label }}" class="form-label">
+                        Observações
+                    </label>
+
+                    {{ form.observacao }}
+
+                    {% for erro in form.observacao.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2 mt-4">
+
+                <button type="submit" class="btn btn-primary">
+                    Criar compra
+                </button>
+
+                <a href="{% url 'compras:lista' %}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

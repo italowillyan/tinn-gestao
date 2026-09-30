@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}
+Fornecedores | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Fornecedores
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Consulte e gerencie os fornecedores da empresa.
+        </p>
+    </div>
+
+    <a href="{% url 'fornecedores:novo' %}" class="btn btn-primary">
+        + Novo fornecedor
+    </a>
+</div>
+
+
+<div class="card tinn-card tinn-card-auto">
+    <div class="card-body">
+
+        <!-- BUSCA -->
+        <form method="get" class="mb-4">
+
+            <div class="input-group">
+
+                <input type="text" name="q" value="{{ busca }}" class="form-control"
+                    placeholder="Buscar por nome, documento, telefone ou e-mail...">
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- TABELA -->
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Fornecedor</th>
+                        <th>Documento</th>
+                        <th>Telefone</th>
+                        <th>E-mail</th>
+                        <th>Status</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for fornecedor in fornecedores %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {% if fornecedor.nome_fantasia %}
+                                {{ fornecedor.nome_fantasia }}
+                                {% else %}
+                                {{ fornecedor.nome }}
+                                {% endif %}
+                            </strong>
+
+                            {% if fornecedor.nome_fantasia %}
+                            <div class="small text-secondary">
+                                {{ fornecedor.nome }}
+                            </div>
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if fornecedor.documento %}
+                            {{ fornecedor.documento }}
+                            {% else %}
+                            <span class="text-secondary">—</span>
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if fornecedor.telefone %}
+                            {{ fornecedor.telefone }}
+                            {% else %}
+                            <span class="text-secondary">—</span>
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if fornecedor.email %}
+                            {{ fornecedor.email }}
+                            {% else %}
+                            <span class="text-secondary">—</span>
+                            {% endif %}
+                        </td>
+
+
+                        <td>
+                            {% if fornecedor.ativo %}
+                            <span class="badge text-bg-success">
+                                Ativo
+                            </span>
+                            {% else %}
+                            <span class="badge text-bg-secondary">
+                                Inativo
+                            </span>
+                            {% endif %}
+                        </td>
+
+
+                        <td class="text-end">
+                            <a href="{% url 'fornecedores:editar' fornecedor.id %}"
+                                class="btn btn-sm btn-outline-secondary">
+                                Editar
+                            </a>
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-secondary">
+                            Nenhum fornecedor encontrado.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

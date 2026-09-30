@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+
+{% block title %}
+Venda #{{ venda.id }} | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Venda #{{ venda.id }}
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Criada em {{ venda.criada_em|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+
+    <div>
+        {% if venda.status == "ABERTA" %}
+        <span class="badge text-bg-warning">
+            Aberta
+        </span>
+
+        {% elif venda.status == "FINALIZADA" %}
+        <span class="badge text-bg-success">
+            Finalizada
+        </span>
+
+        {% else %}
+        <span class="badge text-bg-secondary">
+            Cancelada
+        </span>
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- INFORMAÇÕES DA VENDA -->
+<div class="card tinn-card tinn-card-auto mb-4">
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+                <div class="tinn-card-label">
+                    Cliente
+                </div>
+
+                <strong>
+                    {% if venda.cliente %}
+                    {{ venda.cliente.nome }}
+                    {% else %}
+                    Consumidor não identificado
+                    {% endif %}
+                </strong>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="tinn-card-label">
+                    Pagamento
+                </div>
+
+                <strong>
+                    {% if venda.forma_pagamento %}
+                    {{ venda.get_forma_pagamento_display }}
+                    {% else %}
+                    —
+                    {% endif %}
+                </strong>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="tinn-card-label">
+                    Usuário
+                </div>
+
+                <strong>
+                    {{ venda.usuario.username }}
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ITENS DA VENDA -->
+<div class="card tinn-card tinn-card-auto">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0">
+                Itens da venda
+            </h5>
+
+            {% if venda.status == "ABERTA" %}
+            <a href="{% url 'vendas:adicionar_item' venda.id %}" class="btn btn-sm btn-primary">
+                + Adicionar produto
+            </a>
+            {% endif %}
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Quantidade</th>
+                        <th>Preço unitário</th>
+                        <th>Subtotal</th>
+
+                        {% if venda.status == "ABERTA" %}
+                        <th class="text-end">
+                            Ações
+                        </th>
+                        {% endif %}
+                    </tr>
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in venda.itens.all %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ item.variacao.produto.nome }}
+                            </strong>
+                        </td>
+
+
+                        <td>
+                            {{ item.variacao.sku }}
+                        </td>
+
+
+                        <td>
+                            {{ item.quantidade }}
+                        </td>
+
+
+                        <td>
+                            R$ {{ item.preco_unitario }}
+                        </td>
+
+
+                        <td>
+                            <strong>
+                                R$ {{ item.subtotal }}
+                            </strong>
+                        </td>
+
+
+                        {% if venda.status == "ABERTA" %}
+
+                        <td class="text-end">
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <!-- EDITAR ITEM -->
+                                <a href="{% url 'vendas:editar_item' item.id %}"
+                                    class="btn btn-sm btn-outline-secondary">
+                                    Editar
+                                </a>
+
+
+                                <!-- REMOVER ITEM -->
+                                <form method="post" action="{% url 'vendas:remover_item' item.id %}"
+                                    onsubmit="return confirm('Remover este produto da venda?');">
+                                    {% csrf_token %}
+
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        Remover
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                        {% endif %}
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="{% if venda.status == 'ABERTA' %}6{% else %}5{% endif %}"
+                            class="text-center py-4 text-secondary">
+                            Nenhum produto adicionado à venda.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <hr class="my-4">
+
+
+        <!-- TOTAIS -->
+        <div class="row justify-content-end">
+
+            <div class="col-lg-4 col-md-5">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-secondary">
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        R$ {{ venda.subtotal }}
+                    </strong>
+
+                </div>
+
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-secondary">
+                        Desconto
+                    </span>
+
+                    <strong>
+                        R$ {{ venda.desconto }}
+                    </strong>
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <strong>
+                        Total
+                    </strong>
+
+                    <strong class="fs-4">
+                        R$ {{ venda.total }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- AÇÕES DA VENDA -->
+<div class="d-flex justify-content-between align-items-center mt-3">
+
+    <a href="{% url 'vendas:lista' %}" class="btn btn-outline-secondary">
+        Voltar para vendas
+    </a>
+
+
+    <div class="d-flex gap-2">
+
+        <!-- FINALIZAR -->
+        {% if venda.status == "ABERTA" %}
+
+        <form method="post" action="{% url 'vendas:finalizar' venda.id %}">
+
+            {% csrf_token %}
+
+            <button type="submit" class="btn btn-success">
+                Finalizar venda
+            </button>
+
+        </form>
+
+        {% endif %}
+
+
+        <!-- CANCELAR -->
+        {% if venda.status != "CANCELADA" %}
+
+        <form method="post" action="{% url 'vendas:cancelar' venda.id %}"
+            onsubmit="return confirm('Tem certeza que deseja cancelar esta venda?');">
+
+            {% csrf_token %}
+
+            <button type="submit" class="btn btn-outline-danger">
+                Cancelar venda
+            </button>
+
+        </form>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

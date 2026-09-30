@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="tinn-page-title mb-1">
+        Dashboard
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Visão geral de
+        {{ empresa.nome_fantasia|default:empresa.nome }}
+    </p>
+</div>
+
+
+<!-- VENDAS DE HOJE -->
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">
+        Hoje
+    </h5>
+
+    <a href="{% url 'vendas:lista' %}" class="btn btn-sm btn-outline-primary">
+        Ver vendas
+    </a>
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Vendas hoje
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ vendas.hoje }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Faturamento hoje
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ vendas.faturamento_hoje|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Vendas finalizadas
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ vendas.total }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Faturamento total
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ vendas.faturamento_total|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- FINANCEIRO -->
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">
+        Financeiro
+    </h5>
+
+    <a href="{% url 'financeiro:lista' %}" class="btn btn-sm btn-outline-primary">
+        Ver financeiro
+    </a>
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-lg-4 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Saldo realizado
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ financeiro.saldo_realizado|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Receitas recebidas
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ financeiro.receitas_recebidas|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Despesas pagas
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ financeiro.despesas_pagas|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-6 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Contas a receber
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ financeiro.contas_receber|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-6 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Contas a pagar
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    R$ {{ financeiro.contas_pagar|floatformat:2 }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ESTOQUE -->
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">
+        Estoque
+    </h5>
+
+    <a href="{% url 'estoque:lista' %}" class="btn btn-sm btn-outline-primary">
+        Ver estoque
+    </a>
+</div>
+
+
+<div class="row g-3">
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Variações cadastradas
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ estoque.variacoes }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Unidades em estoque
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ estoque.unidades }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Estoque baixo
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ estoque.baixo }}
+                </p>
+
+                <small class="text-secondary">
+                    Entre 1 e 5 unidades
+                </small>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="tinn-card-label">
+                    Sem estoque
+                </div>
+
+                <p class="tinn-card-value mb-0">
+                    {{ estoque.zerado }}
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

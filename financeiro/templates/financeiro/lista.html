@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block title %}
+Financeiro | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-start mb-4">
+
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Financeiro
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Acompanhe receitas, despesas e resultados da empresa.
+        </p>
+    </div>
+
+    <a href="{% url 'financeiro:novo' %}" class="btn btn-primary">
+        + Novo lançamento
+    </a>
+
+</div>
+
+
+<!-- RESUMO FINANCEIRO -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4 col-xl">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="text-secondary small mb-1">
+                    Receitas recebidas
+                </div>
+
+                <div class="fs-4 fw-bold">
+                    R$ {{ resumo.receitas_recebidas|floatformat:2 }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 col-xl">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="text-secondary small mb-1">
+                    Despesas pagas
+                </div>
+
+                <div class="fs-4 fw-bold">
+                    R$ {{ resumo.despesas_pagas|floatformat:2 }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 col-xl">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="text-secondary small mb-1">
+                    A receber
+                </div>
+
+                <div class="fs-4 fw-bold">
+                    R$ {{ resumo.a_receber|floatformat:2 }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6 col-xl">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="text-secondary small mb-1">
+                    A pagar
+                </div>
+
+                <div class="fs-4 fw-bold">
+                    R$ {{ resumo.a_pagar|floatformat:2 }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6 col-xl">
+        <div class="card tinn-card h-100">
+            <div class="card-body">
+
+                <div class="text-secondary small mb-1">
+                    Saldo realizado
+                </div>
+
+                <div class="fs-4 fw-bold">
+                    R$ {{ resumo.saldo_realizado|floatformat:2 }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- LANÇAMENTOS -->
+
+<div class="card tinn-card tinn-card-auto">
+
+    <div class="card-body">
+
+        <!-- FILTROS -->
+
+        <form method="get" class="row g-2 mb-4">
+
+            <div class="col-md-5">
+
+                <input type="text" name="q" value="{{ busca }}" class="form-control"
+                    placeholder="Pesquisar lançamento...">
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <select name="tipo" class="form-select">
+
+                    <option value="">
+                        Todos os tipos
+                    </option>
+
+                    <option value="RECEITA">
+                        Receitas
+                    </option>
+
+                    <option value="DESPESA">
+                        Despesas
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-md-2">
+
+                <select name="status" class="form-select">
+
+                    <option value="">
+                        Todos os status
+                    </option>
+
+                    <option value="PENDENTE">
+                        Pendentes
+                    </option>
+
+                    <option value="PAGO">
+                        Pagos
+                    </option>
+
+                    <option value="CANCELADO">
+                        Cancelados
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="col-md-3 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                    Filtrar
+                </button>
+
+                <a href="{% url 'financeiro:lista' %}" class="btn btn-outline-secondary">
+                    Limpar
+                </a>
+
+            </div>
+
+        </form>
+
+
+        <!-- TABELA DE LANÇAMENTOS -->
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Descrição</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Vencimento</th>
+                        <th>Origem</th>
+                        <th class="text-end">
+                            Ações
+                        </th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for lancamento in lancamentos %}
+
+                    <tr>
+
+                        <td>
+                            {{ lancamento.id }}
+                        </td>
+
+
+                        <td>
+                            {{ lancamento.descricao }}
+                        </td>
+
+
+                        <td>
+
+                            {% if lancamento.tipo == "RECEITA" %}
+
+                            <span class="badge text-bg-success">
+                                Receita
+                            </span>
+
+                            {% elif lancamento.tipo == "DESPESA" %}
+
+                            <span class="badge text-bg-danger">
+                                Despesa
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge text-bg-secondary">
+                                {{ lancamento.tipo }}
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            R$ {{ lancamento.valor|floatformat:2 }}
+                        </td>
+
+
+                        <td>
+
+                            {% if lancamento.status == "PAGO" %}
+
+                            <span class="badge text-bg-success">
+                                Pago
+                            </span>
+
+                            {% elif lancamento.status == "PENDENTE" %}
+
+                            <span class="badge text-bg-warning">
+                                Pendente
+                            </span>
+
+                            {% elif lancamento.status == "CANCELADO" %}
+
+                            <span class="badge text-bg-secondary">
+                                Cancelado
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge text-bg-secondary">
+                                {{ lancamento.status }}
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if lancamento.data_vencimento %}
+
+                            {{ lancamento.data_vencimento|date:"d/m/Y" }}
+
+                            {% else %}
+
+                            —
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if lancamento.venda %}
+
+                            Venda #{{ lancamento.venda.id }}
+
+                            {% elif lancamento.compra %}
+
+                            Compra #{{ lancamento.compra.id }}
+
+                            {% else %}
+
+                            Manual
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td class="text-end">
+
+                            <a href="{% url 'financeiro:detalhe' lancamento.id %}"
+                                class="btn btn-sm btn-outline-secondary">
+                                Detalhes
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="8" class="text-center text-secondary py-4">
+                            Nenhum lançamento financeiro encontrado.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

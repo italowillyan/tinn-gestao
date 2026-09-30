@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}
+Movimentações de estoque | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Movimentações de estoque
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Histórico de entradas e saídas do estoque.
+        </p>
+    </div>
+
+    <a
+        href="{% url 'estoque:nova_movimentacao' %}"
+        class="btn btn-primary"
+    >
+        + Nova movimentação
+    </a>
+
+</div>
+
+
+<div class="card tinn-card">
+
+    <div class="card-body">
+
+        <form method="get" class="mb-4">
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ busca }}"
+                    class="form-control"
+                    placeholder="Buscar por produto, SKU ou observação..."
+                >
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Buscar
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Tipo</th>
+                        <th>Motivo</th>
+                        <th>Qtd.</th>
+                        <th>Usuário</th>
+                        <th>Observação</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for movimentacao in movimentacoes %}
+
+                    <tr>
+
+                        <td>
+                            {{ movimentacao.criada_em|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ movimentacao.variacao.produto.nome }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ movimentacao.variacao.sku }}
+                        </td>
+
+                        <td>
+
+                            {% if movimentacao.tipo == "ENTRADA" %}
+
+                                <span class="badge text-bg-success">
+                                    Entrada
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge text-bg-danger">
+                                    Saída
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ movimentacao.get_motivo_display }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ movimentacao.quantidade }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ movimentacao.usuario.username }}
+                        </td>
+
+                        <td>
+
+                            {% if movimentacao.observacao %}
+                                {{ movimentacao.observacao }}
+                            {% else %}
+                                <span class="text-secondary">
+                                    —
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td
+                            colspan="8"
+                            class="text-center py-4 text-secondary"
+                        >
+                            Nenhuma movimentação encontrada.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

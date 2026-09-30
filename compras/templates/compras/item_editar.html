@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+Editar item | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="tinn-page-title mb-1">
+        Editar item
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Compra #{{ compra.id }} — {{ compra.fornecedor }}
+    </p>
+</div>
+
+
+<div class="card tinn-card tinn-card-auto">
+    <div class="card-body">
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+
+            <div class="row g-3">
+
+                <div class="col-md-12">
+                    <label for="{{ form.variacao.id_for_label }}" class="form-label">
+                        Produto / SKU
+                    </label>
+
+                    {{ form.variacao }}
+
+                    {% for erro in form.variacao.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="{{ form.quantidade.id_for_label }}" class="form-label">
+                        Quantidade
+                    </label>
+
+                    {{ form.quantidade }}
+
+                    {% for erro in form.quantidade.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+
+                <div class="col-md-6">
+                    <label for="{{ form.custo_unitario.id_for_label }}" class="form-label">
+                        Custo unitário
+                    </label>
+
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            R$
+                        </span>
+
+                        {{ form.custo_unitario }}
+                    </div>
+
+                    {% for erro in form.custo_unitario.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2 mt-4">
+
+                <button type="submit" class="btn btn-primary">
+                    Salvar alterações
+                </button>
+
+                <a href="{% url 'compras:detalhe' compra.id %}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

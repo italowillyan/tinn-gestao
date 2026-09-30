@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}
+Lançamento #{{ lancamento.id }} | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-start mb-4">
+
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Lançamento #{{ lancamento.id }}
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            {{ lancamento.descricao }}
+        </p>
+    </div>
+
+    <div>
+
+        {% if lancamento.status == "PAGO" %}
+
+        <span class="badge text-bg-success fs-6">
+            Pago
+        </span>
+
+        {% elif lancamento.status == "PENDENTE" %}
+
+        <span class="badge text-bg-warning fs-6">
+            Pendente
+        </span>
+
+        {% elif lancamento.status == "CANCELADO" %}
+
+        <span class="badge text-bg-secondary fs-6">
+            Cancelado
+        </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<div class="card tinn-card tinn-card-auto mb-4">
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Tipo
+                </div>
+
+                {% if lancamento.tipo == "RECEITA" %}
+
+                <span class="badge text-bg-success mt-1">
+                    Receita
+                </span>
+
+                {% else %}
+
+                <span class="badge text-bg-danger mt-1">
+                    Despesa
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Valor
+                </div>
+
+                <strong class="fs-5">
+                    R$ {{ lancamento.valor|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Responsável
+                </div>
+
+                <strong>
+                    {{ lancamento.usuario.username }}
+                </strong>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Vencimento
+                </div>
+
+                <strong>
+
+                    {% if lancamento.data_vencimento %}
+
+                    {{ lancamento.data_vencimento|date:"d/m/Y" }}
+
+                    {% else %}
+
+                    —
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Data de pagamento
+                </div>
+
+                <strong>
+
+                    {% if lancamento.data_pagamento %}
+
+                    {{ lancamento.data_pagamento|date:"d/m/Y" }}
+
+                    {% else %}
+
+                    —
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Origem
+                </div>
+
+                <strong>
+
+                    {% if lancamento.venda %}
+
+                    Venda #{{ lancamento.venda.id }}
+
+                    {% elif lancamento.compra %}
+
+                    Compra #{{ lancamento.compra.id }}
+
+                    {% else %}
+
+                    Lançamento manual
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="text-secondary small">
+                    Criado em
+                </div>
+
+                <strong>
+                    {{ lancamento.criado_em|date:"d/m/Y H:i" }}
+                </strong>
+
+            </div>
+
+
+            {% if lancamento.observacao %}
+
+            <div class="col-12">
+
+                <div class="text-secondary small">
+                    Observações
+                </div>
+
+                <div class="mt-1">
+                    {{ lancamento.observacao }}
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="d-flex flex-wrap gap-2">
+
+    {% if not lancamento.venda and not lancamento.compra and lancamento.status == "PENDENTE" %}
+
+    <a href="{% url 'financeiro:editar' lancamento.id %}" class="btn btn-primary">
+        Editar
+    </a>
+
+    {% endif %}
+
+    {% if lancamento.status == "PENDENTE" %}
+
+    <form method="post" action="{% url 'financeiro:marcar_como_pago' lancamento.id %}">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-success" onclick="return confirm('Confirmar este pagamento?');">
+            {% if lancamento.tipo == "RECEITA" %}
+            Marcar como recebido
+            {% else %}
+            Marcar como pago
+            {% endif %}
+        </button>
+
+    </form>
+
+    {% endif %}
+
+
+    {% if not lancamento.venda and not lancamento.compra and lancamento.status != "CANCELADO" %}
+
+    <form method="post" action="{% url 'financeiro:cancelar' lancamento.id %}">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-outline-danger"
+            onclick="return confirm('Tem certeza que deseja cancelar este lançamento?');">
+            Cancelar lançamento
+        </button>
+
+    </form>
+
+    {% endif %}
+
+
+    <a href="{% url 'financeiro:lista' %}" class="btn btn-outline-secondary">
+        Voltar para financeiro
+    </a>
+
+</div>
+
+{% endblock %}

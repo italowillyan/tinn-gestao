@@ -1,0 +1,125 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}TINN Gestão{% endblock %}
+    </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+</head>
+
+<body>
+
+    <header class="tinn-navbar d-flex align-items-center px-4">
+        <div class="d-flex justify-content-between align-items-center w-100">
+
+            <span class="tinn-brand">
+                TINN Gestão
+            </span>
+
+            <span class="tinn-user">
+                {{ request.user.username }}
+            </span>
+
+        </div>
+    </header>
+
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <aside class="col-md-2 tinn-sidebar p-3">
+
+                <div class="tinn-company mb-3">
+                    {{ request.user.perfil.empresa }}
+                </div>
+
+                <nav class="nav flex-column">
+
+                    <a class="nav-link active" href="/">
+                        Dashboard
+                    </a>
+
+                    <a class="nav-link" href="{% url 'vendas:lista' %}">
+                        Vendas
+                    </a>
+
+                    <a class="nav-link" href="{% url 'produtos:lista' %}">
+                        Produtos
+                    </a>
+
+                    <a class="nav-link" href="{% url 'estoque:lista' %}">
+                        Estoque
+                    </a>
+
+                    <a class="nav-link" href="{% url 'clientes:lista' %}">
+                        Clientes
+                    </a>
+
+                    <a class="nav-link" href="{% url 'compras:lista' %}">
+                        Compras
+                    </a>
+
+                    <a class="nav-link" href="{% url 'fornecedores:lista' %}">
+                        Fornecedores
+                    </a>
+
+                    <a class="nav-link" href="{% url 'financeiro:lista' %}">
+                        Financeiro
+                    </a>
+
+                </nav>
+
+            </aside>
+
+
+            <main class="col-md-10 tinn-main">
+
+                {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="alert
+                {% if message.tags == 'success' %}
+                    alert-success
+                {% elif message.tags == 'error' %}
+                    alert-danger
+                {% elif message.tags == 'warning' %}
+                    alert-warning
+                {% else %}
+                    alert-info
+                {% endif %}
+                alert-dismissible fade show" role="alert">
+
+                    {{ message }}
+
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+
+                </div>
+
+                {% endfor %}
+
+                {% endif %}
+
+
+                {% block content %}
+                {% endblock %}
+
+            </main>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

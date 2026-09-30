@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}
+Estoque | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div
+    class="d-flex justify-content-between align-items-center mb-4"
+>
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Estoque
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Consulte e controle as quantidades disponíveis.
+        </p>
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'estoque:historico' %}"
+            class="btn btn-outline-secondary"
+        >
+            Histórico
+        </a>
+
+        <a
+            href="{% url 'estoque:nova_movimentacao' %}"
+            class="btn btn-primary"
+        >
+            + Nova movimentação
+        </a>
+
+    </div>
+</div>
+
+
+<div class="card tinn-card">
+
+    <div class="card-body">
+
+        <form method="get" class="mb-4">
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ busca }}"
+                    class="form-control"
+                    placeholder="Buscar por produto, SKU, cor ou tamanho..."
+                >
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Buscar
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th>Variação</th>
+                        <th>Estoque atual</th>
+                        <th>Estoque mínimo</th>
+                        <th>Situação</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for variacao in variacoes %}
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                {{ variacao.produto.nome }}
+                            </strong>
+
+                            <div class="text-secondary small">
+                                {{ variacao.produto.categoria.nome }}
+                            </div>
+                        </td>
+
+
+                        <td>
+                            {{ variacao.sku }}
+                        </td>
+
+
+                        <td>
+
+                            {% if variacao.tamanho %}
+                                {{ variacao.tamanho }}
+                            {% endif %}
+
+                            {% if variacao.tamanho and variacao.cor %}
+                                •
+                            {% endif %}
+
+                            {% if variacao.cor %}
+                                {{ variacao.cor }}
+                            {% endif %}
+
+                            {% if not variacao.tamanho and not variacao.cor %}
+                                <span class="text-secondary">
+                                    —
+                                </span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            <strong>
+                                {{ variacao.estoque_atual }}
+                            </strong>
+                        </td>
+
+
+                        <td>
+                            {{ variacao.estoque_minimo }}
+                        </td>
+
+
+                        <td>
+
+                            {% if variacao.estoque_atual == 0 %}
+
+                                <span class="badge text-bg-danger">
+                                    Sem estoque
+                                </span>
+
+                            {% elif variacao.estoque_atual <= variacao.estoque_minimo %}
+
+                                <span class="badge text-bg-warning">
+                                    Estoque baixo
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge text-bg-success">
+                                    Normal
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td
+                            colspan="6"
+                            class="text-center py-4 text-secondary"
+                        >
+                            Nenhum item encontrado no estoque.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

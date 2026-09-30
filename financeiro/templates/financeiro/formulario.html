@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}
+Novo lançamento | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="tinn-page-title mb-1">
+        Novo lançamento
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Cadastre uma receita ou despesa manual.
+    </p>
+</div>
+
+
+<div class="card tinn-card tinn-card-auto">
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            {% if form.non_field_errors %}
+
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+
+            {% endif %}
+
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <label for="{{ form.tipo.id_for_label }}" class="form-label">
+                        Tipo
+                    </label>
+
+                    {{ form.tipo }}
+
+                    {% for erro in form.tipo.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label for="{{ form.status.id_for_label }}" class="form-label">
+                        Status
+                    </label>
+
+                    {{ form.status }}
+
+                    {% for erro in form.status.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-8">
+
+                    <label for="{{ form.descricao.id_for_label }}" class="form-label">
+                        Descrição
+                    </label>
+
+                    {{ form.descricao }}
+
+                    {% for erro in form.descricao.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label for="{{ form.valor.id_for_label }}" class="form-label">
+                        Valor
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            R$
+                        </span>
+
+                        {{ form.valor }}
+
+                    </div>
+
+                    {% for erro in form.valor.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label for="{{ form.data_vencimento.id_for_label }}" class="form-label">
+                        Data de vencimento
+                    </label>
+
+                    {{ form.data_vencimento }}
+
+                    {% for erro in form.data_vencimento.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <label for="{{ form.data_pagamento.id_for_label }}" class="form-label">
+                        Data de pagamento
+                    </label>
+
+                    {{ form.data_pagamento }}
+
+                    {% for erro in form.data_pagamento.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Pode ficar em branco se o lançamento ainda estiver pendente.
+                    </div>
+
+                </div>
+
+
+                <div class="col-12">
+
+                    <label for="{{ form.observacao.id_for_label }}" class="form-label">
+                        Observações
+                    </label>
+
+                    {{ form.observacao }}
+
+                    {% for erro in form.observacao.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ erro }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex gap-2 mt-4">
+
+                <button type="submit" class="btn btn-primary">
+                    Salvar lançamento
+                </button>
+
+                <a href="{% url 'financeiro:lista' %}" class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

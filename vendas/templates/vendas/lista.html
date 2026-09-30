@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}
+Vendas | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="tinn-page-title mb-1">
+            Vendas
+        </h1>
+
+        <p class="tinn-page-subtitle mb-0">
+            Consulte e gerencie as vendas da empresa.
+        </p>
+    </div>
+
+    <a href="{% url 'vendas:nova' %}" class="btn btn-primary">
+        + Nova venda
+    </a>
+</div>
+
+
+<div class="card tinn-card">
+
+    <div class="card-body">
+
+        <!-- BUSCA -->
+        <form method="get" class="mb-4">
+
+            <div class="input-group">
+
+                <input type="text" name="q" value="{{ busca }}" class="form-control"
+                    placeholder="Buscar por número, cliente ou usuário...">
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- TABELA -->
+        <div class="table-responsive">
+
+            <table class="table table-dark table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>Venda</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Pagamento</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Usuário</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for venda in vendas %}
+
+                    <tr>
+
+                        <!-- NÚMERO -->
+                        <td>
+                            <strong>
+                                #{{ venda.id }}
+                            </strong>
+                        </td>
+
+
+                        <!-- DATA -->
+                        <td>
+                            {{ venda.criada_em|date:"d/m/Y H:i" }}
+                        </td>
+
+
+                        <!-- CLIENTE -->
+                        <td>
+
+                            {% if venda.cliente %}
+
+                            {{ venda.cliente.nome }}
+
+                            {% else %}
+
+                            <span class="text-secondary">
+                                Consumidor não identificado
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- PAGAMENTO -->
+                        <td>
+
+                            {% if venda.forma_pagamento %}
+
+                            {{ venda.get_forma_pagamento_display }}
+
+                            {% else %}
+
+                            <span class="text-secondary">
+                                —
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- TOTAL -->
+                        <td>
+                            <strong>
+                                R$ {{ venda.total }}
+                            </strong>
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td>
+
+                            {% if venda.status == "ABERTA" %}
+
+                            <span class="badge text-bg-warning">
+                                Aberta
+                            </span>
+
+                            {% elif venda.status == "FINALIZADA" %}
+
+                            <span class="badge text-bg-success">
+                                Finalizada
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge text-bg-secondary">
+                                Cancelada
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- USUÁRIO -->
+                        <td>
+                            {{ venda.usuario.username }}
+                        </td>
+
+
+                        <!-- AÇÕES -->
+                        <td class="text-end">
+
+                            <a href="{% url 'vendas:detalhe' venda.id %}" class="btn btn-sm btn-outline-secondary">
+                                Ver detalhes
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-secondary">
+                            Nenhuma venda encontrada.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

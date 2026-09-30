@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}
+Editar cliente | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1 class="tinn-page-title mb-1">
+        Editar cliente
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Altere os dados de {{ cliente.nome }}.
+    </p>
+</div>
+
+
+<div class="card tinn-card">
+
+    <div class="card-body">
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Nome
+                </label>
+
+                {{ form.nome }}
+
+                {% for erro in form.nome.errors %}
+                    <div class="text-danger mt-1">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Telefone
+                    </label>
+
+                    {{ form.telefone }}
+
+                    {% for erro in form.telefone.errors %}
+                        <div class="text-danger mt-1">
+                            {{ erro }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        E-mail
+                    </label>
+
+                    {{ form.email }}
+
+                    {% for erro in form.email.errors %}
+                        <div class="text-danger mt-1">
+                            {{ erro }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Instagram
+                    </label>
+
+                    {{ form.instagram }}
+
+                    {% for erro in form.instagram.errors %}
+                        <div class="text-danger mt-1">
+                            {{ erro }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        CPF
+                    </label>
+
+                    {{ form.cpf }}
+
+                    {% for erro in form.cpf.errors %}
+                        <div class="text-danger mt-1">
+                            {{ erro }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Endereço
+                </label>
+
+                {{ form.endereco }}
+
+                {% for erro in form.endereco.errors %}
+                    <div class="text-danger mt-1">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Observação
+                </label>
+
+                {{ form.observacao }}
+
+                {% for erro in form.observacao.errors %}
+                    <div class="text-danger mt-1">
+                        {{ erro }}
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <div class="form-check mb-4">
+
+                {{ form.ativo }}
+
+                <label
+                    class="form-check-label"
+                    for="{{ form.ativo.id_for_label }}"
+                >
+                    Cliente ativo
+                </label>
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Salvar alterações
+                </button>
+
+                <a
+                    href="{% url 'clientes:lista' %}"
+                    class="btn btn-outline-secondary"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
