@@ -1,0 +1,64 @@
+{% extends "accounts/base_auth.html" %}
+
+{% block title %}
+Login | TINN Gestão
+{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+    <h1 class="tinn-page-title mb-1">
+        TINN Gestão
+    </h1>
+
+    <p class="tinn-page-subtitle mb-0">
+        Acesse sua conta
+    </p>
+</div>
+
+
+<div class="card tinn-card">
+
+    <div class="card-body p-4">
+
+        {% if erro %}
+        <div class="alert alert-danger" role="alert">
+            {{ erro }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="username" class="form-label">
+                    Usuário
+                </label>
+
+                <input type="text" class="form-control" id="username" name="username" placeholder="Digite seu usuário"
+                    required autofocus>
+            </div>
+
+
+            <div class="mb-4">
+                <label for="password" class="form-label">
+                    Senha
+                </label>
+
+                <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua senha"
+                    required>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary w-100">
+                Entrar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

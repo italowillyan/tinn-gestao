@@ -26,9 +26,17 @@
                 TINN Gestão
             </span>
 
-            <span class="tinn-user">
-                {{ request.user.username }}
-            </span>
+            <div class="d-flex align-items-center gap-3">
+
+                <span class="tinn-user">
+                    {{ request.user.username }}
+                </span>
+
+                <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-light">
+                    Sair
+                </a>
+
+            </div>
 
         </div>
     </header>
