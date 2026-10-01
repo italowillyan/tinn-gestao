@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import F, Q
 from django.shortcuts import render, redirect
 
@@ -7,6 +7,7 @@ from .models import MovimentacaoEstoque
 from .forms import MovimentacaoEstoqueForm
 
 @login_required
+@permission_required("accounts.acessar_estoque", raise_exception=True)
 def lista_estoque(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()
@@ -44,7 +45,9 @@ def lista_estoque(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_estoque", raise_exception=True)
 def nova_movimentacao(request):
     empresa = request.user.perfil.empresa
 
@@ -79,7 +82,9 @@ def nova_movimentacao(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_estoque", raise_exception=True)
 def historico_movimentacoes(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()

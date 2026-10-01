@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,6 +7,7 @@ from .forms import ClienteForm
 
 
 @login_required
+@permission_required("accounts.acessar_clientes", raise_exception=True)
 def lista_clientes(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()
@@ -37,7 +38,9 @@ def lista_clientes(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_clientes", raise_exception=True)
 def criar_cliente(request):
     empresa = request.user.perfil.empresa
 
@@ -65,7 +68,9 @@ def criar_cliente(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_clientes", raise_exception=True)
 def editar_cliente(request, cliente_id):
     empresa = request.user.perfil.empresa
 
@@ -101,4 +106,3 @@ def editar_cliente(request, cliente_id):
         "clientes/editar.html",
         contexto,
     )
-

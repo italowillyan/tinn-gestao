@@ -19,6 +19,7 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <header class="tinn-navbar d-flex align-items-center px-4">
         <div class="d-flex justify-content-between align-items-center w-100">
 
@@ -42,54 +43,82 @@
     </header>
 
 
+    <!-- CONTEÚDO PRINCIPAL -->
     <div class="container-fluid">
+
         <div class="row">
 
+            <!-- SIDEBAR -->
             <aside class="col-md-2 tinn-sidebar p-3">
 
                 <div class="tinn-company mb-3">
                     {{ request.user.perfil.empresa }}
                 </div>
 
+
                 <nav class="nav flex-column">
 
+                    {% if perms.accounts.acessar_dashboard %}
                     <a class="nav-link active" href="/">
                         Dashboard
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_vendas %}
                     <a class="nav-link" href="{% url 'vendas:lista' %}">
                         Vendas
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_produtos %}
                     <a class="nav-link" href="{% url 'produtos:lista' %}">
                         Produtos
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_estoque %}
                     <a class="nav-link" href="{% url 'estoque:lista' %}">
                         Estoque
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_clientes %}
                     <a class="nav-link" href="{% url 'clientes:lista' %}">
                         Clientes
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_compras %}
                     <a class="nav-link" href="{% url 'compras:lista' %}">
                         Compras
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_fornecedores %}
                     <a class="nav-link" href="{% url 'fornecedores:lista' %}">
                         Fornecedores
                     </a>
+                    {% endif %}
 
+
+                    {% if perms.accounts.acessar_financeiro %}
                     <a class="nav-link" href="{% url 'financeiro:lista' %}">
                         Financeiro
                     </a>
+                    {% endif %}
 
                 </nav>
 
             </aside>
 
 
+            <!-- ÁREA PRINCIPAL -->
             <main class="col-md-10 tinn-main">
 
                 {% if messages %}
@@ -97,20 +126,21 @@
                 {% for message in messages %}
 
                 <div class="alert
-                {% if message.tags == 'success' %}
-                    alert-success
-                {% elif message.tags == 'error' %}
-                    alert-danger
-                {% elif message.tags == 'warning' %}
-                    alert-warning
-                {% else %}
-                    alert-info
-                {% endif %}
-                alert-dismissible fade show" role="alert">
+                            {% if message.tags == 'success' %}
+                                alert-success
+                            {% elif message.tags == 'error' %}
+                                alert-danger
+                            {% elif message.tags == 'warning' %}
+                                alert-warning
+                            {% else %}
+                                alert-info
+                            {% endif %}
+                            alert-dismissible fade show" role="alert">
 
                     {{ message }}
 
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar">
+                    </button>
 
                 </div>
 
@@ -125,9 +155,13 @@
             </main>
 
         </div>
+
     </div>
 
+
+    <!-- BOOTSTRAP -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>

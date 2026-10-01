@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,6 +7,7 @@ from .models import Produto, VariacaoProduto
 
 
 @login_required
+@permission_required("accounts.acessar_produtos", raise_exception=True)
 def lista_produtos(request):
     empresa = request.user.perfil.empresa
 
@@ -37,7 +38,9 @@ def lista_produtos(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_produtos", raise_exception=True)
 def criar_produto(request):
     empresa = request.user.perfil.empresa
 
@@ -71,7 +74,9 @@ def criar_produto(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_produtos", raise_exception=True)
 def criar_variacao(request, produto_id):
     empresa = request.user.perfil.empresa
 
@@ -108,7 +113,9 @@ def criar_variacao(request, produto_id):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_produtos", raise_exception=True)
 def editar_produto(request, produto_id):
     empresa = request.user.perfil.empresa
 
@@ -147,7 +154,9 @@ def editar_produto(request, produto_id):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_produtos", raise_exception=True)
 def editar_variacao(request, variacao_id):
     empresa = request.user.perfil.empresa
 

@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
@@ -11,6 +11,7 @@ from financeiro.services import cancelar_venda, finalizar_venda
 
 
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def lista_vendas(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()
@@ -48,7 +49,9 @@ def lista_vendas(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def criar_venda(request):
     empresa = request.user.perfil.empresa
 
@@ -87,7 +90,9 @@ def criar_venda(request):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def detalhe_venda(request, venda_id):
     empresa = request.user.perfil.empresa
 
@@ -114,7 +119,9 @@ def detalhe_venda(request, venda_id):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def adicionar_item(request, venda_id):
     empresa = request.user.perfil.empresa
 
@@ -159,7 +166,9 @@ def adicionar_item(request, venda_id):
         contexto,
     )
 
+
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def finalizar(request, venda_id):
     empresa = request.user.perfil.empresa
 
@@ -197,6 +206,7 @@ def finalizar(request, venda_id):
 
 
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def cancelar(request, venda_id):
     empresa = request.user.perfil.empresa
 
@@ -223,6 +233,7 @@ def cancelar(request, venda_id):
 
 
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def remover_item(request, item_id):
     empresa = request.user.perfil.empresa
 
@@ -255,6 +266,7 @@ def remover_item(request, item_id):
 
 
 @login_required
+@permission_required("accounts.acessar_vendas", raise_exception=True)
 def editar_item(request, item_id):
     empresa = request.user.perfil.empresa
 

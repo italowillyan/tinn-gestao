@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -9,6 +9,7 @@ from .services import resumo_financeiro
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def lista_lancamentos(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()
@@ -64,6 +65,7 @@ def lista_lancamentos(request):
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def novo_lancamento(request):
     empresa = request.user.perfil.empresa
 
@@ -99,6 +101,7 @@ def novo_lancamento(request):
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def detalhe_lancamento(request, lancamento_id):
     empresa = request.user.perfil.empresa
 
@@ -122,6 +125,7 @@ def detalhe_lancamento(request, lancamento_id):
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def marcar_como_pago(request, lancamento_id):
     empresa = request.user.perfil.empresa
 
@@ -176,6 +180,7 @@ def marcar_como_pago(request, lancamento_id):
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def cancelar_lancamento(request, lancamento_id):
     empresa = request.user.perfil.empresa
 
@@ -229,6 +234,7 @@ def cancelar_lancamento(request, lancamento_id):
 
 
 @login_required
+@permission_required("accounts.acessar_financeiro", raise_exception=True)
 def editar_lancamento(request, lancamento_id):
     empresa = request.user.perfil.empresa
 
@@ -299,4 +305,3 @@ def editar_lancamento(request, lancamento_id):
             "lancamento": lancamento,
         },
     )
-

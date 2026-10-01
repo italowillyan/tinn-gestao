@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,6 +7,7 @@ from .models import Fornecedor
 
 
 @login_required
+@permission_required("accounts.acessar_fornecedores", raise_exception=True)
 def lista_fornecedores(request):
     empresa = request.user.perfil.empresa
 
@@ -36,6 +37,7 @@ def lista_fornecedores(request):
 
 
 @login_required
+@permission_required("accounts.acessar_fornecedores", raise_exception=True)
 def criar_fornecedor(request):
     empresa = request.user.perfil.empresa
 
@@ -62,6 +64,7 @@ def criar_fornecedor(request):
 
 
 @login_required
+@permission_required("accounts.acessar_fornecedores", raise_exception=True)
 def editar_fornecedor(request, fornecedor_id):
     empresa = request.user.perfil.empresa
 

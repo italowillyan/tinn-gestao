@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.utils import timezone
 
@@ -10,6 +10,7 @@ from vendas.models import Venda
 
 
 @login_required
+@permission_required("accounts.acessar_dashboard", raise_exception=True)
 def dashboard(request):
     empresa = request.user.perfil.empresa
     hoje = timezone.localdate()

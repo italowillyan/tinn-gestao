@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,6 +11,7 @@ from .models import Compra, ItemCompra
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def lista_compras(request):
     empresa = request.user.perfil.empresa
     busca = request.GET.get("q", "").strip()
@@ -48,6 +49,7 @@ def lista_compras(request):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def criar_compra(request):
     empresa = request.user.perfil.empresa
 
@@ -92,6 +94,7 @@ def criar_compra(request):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def detalhe_compra(request, compra_id):
     empresa = request.user.perfil.empresa
 
@@ -116,6 +119,7 @@ def detalhe_compra(request, compra_id):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def adicionar_item(request, compra_id):
     empresa = request.user.perfil.empresa
 
@@ -165,6 +169,7 @@ def adicionar_item(request, compra_id):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def editar_item(request, item_id):
     empresa = request.user.perfil.empresa
 
@@ -229,6 +234,7 @@ def editar_item(request, item_id):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def remover_item(request, item_id):
     empresa = request.user.perfil.empresa
 
@@ -271,6 +277,7 @@ def remover_item(request, item_id):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def finalizar(request, compra_id):
     empresa = request.user.perfil.empresa
 
@@ -308,6 +315,7 @@ def finalizar(request, compra_id):
 
 
 @login_required
+@permission_required("accounts.acessar_compras", raise_exception=True)
 def cancelar(request, compra_id):
     empresa = request.user.perfil.empresa
 
